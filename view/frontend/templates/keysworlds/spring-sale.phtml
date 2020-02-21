@@ -1,1 +1,124 @@
-<p>this is test</p>
+<?php 
+	$_topOne = $block->getTopOne();
+	$_topTwo = $block->getTopTwo();
+	$_topThr = $block->getTopThree();
+	$_listId = $block->ProductList();
+	$_listIds= [];
+	if (strstr($_listId, ','))
+	{
+		$_listIds = explode(',', $_listId);
+	} else {
+		$_listIds = $_listId;
+	}
+
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	// $priceCurrency = $objectManager->get('Magento\Framework\Pricing\PriceCurrencyInterface');
+	$priceHelper   = $objectManager->create('Magento\Framework\Pricing\Helper\Data');
+	$store 		   = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore();
+	$imageBaseUrl  = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product';
+
+
+	$productOne = $objectManager->create('Magento\Catalog\Model\Product')->load((int)$_topOne);
+	$productTwo = $objectManager->create('Magento\Catalog\Model\Product')->load((int)$_topTwo);
+	$productThr = $objectManager->create('Magento\Catalog\Model\Product')->load((int)$_topThr);
+
+	$_productList = [];
+	if (is_array($_listIds)) 
+	{
+		foreach ($_listIds as $_id)
+		{
+			$_productList[] = $objectManager->create('Magento\Catalog\Model\Product')->load((int)$_id);
+		}
+	} else {
+		$_productList[] = $objectManager->create('Magento\Catalog\Model\Product')->load((int)$_listIds);
+	}
+
+ ?>
+
+<div class="kws-spring">
+    <div class="header">
+        <img src="https://keysworlds.com/media/wysiwyg/sale/header.jpg" alt=""></div>
+    <div class="center">
+        <div class="highlight1">
+            <div class="cover1">
+                <img src="<?php echo $imageBaseUrl . $productOne->getImage() ?>" alt=""></div>
+	            <div class="title1"><?php echo $productOne->getName() ?></div>
+	            <div class="description1"><?php echo $productOne->getMetaDescription() ?></div>
+	            <div class="discountprice1"><?php echo $priceHelper->currency($productOne->getSpecialPrice(), true, false) ?></div>
+	            <div class="originprice1"><?php echo $priceHelper->currency($productOne->getPrice(), true, false) ?></div>
+	            <div class="discountoff">
+	                 <img src="https://keysworlds.com/media/wysiwyg/sale/45off.png" alt="">
+	             </div>
+	            <a href="<?php echo $productOne->getProductUrl() ?>" target="_blank" rel="noopener">
+	                <button>BUY NOW</button>
+	            </a>
+            </div>
+        </div>
+
+        <div class="top-next-box">
+        	<div class="highlight2">
+	            <div class="cover2">
+	                <img src="<?php echo $imageBaseUrl .  $productTwo->getImage() ?>" alt="">
+	            </div>
+	            <div class="title2"><?php echo $productTwo->getName() ?></div>
+	            <div class="description2"><?php echo $productTwo->getMetaDescription() ?></div>
+	            <div class="discountprice2"><?php echo $priceHelper->currency($productTwo->getSpecialPrice(), true, false) ?></div>
+	            <div class="originprice2"><?php echo $priceHelper->currency($productTwo->getPrice(), true, false) ?></div>
+	            <div class="discountoff">
+	                <img src="https://keysworlds.com/media/wysiwyg/sale/45off.png" alt="">
+	            </div>
+	            <a href="<?php echo $productTwo->getProductUrl() ?>" target="_blank" rel="noopener">
+	                <button>BUY NOW</button>
+	            </a>
+	        </div>
+	        <div class="highlight2">
+	            <div class="cover2">
+	                <img src="<?php echo $imageBaseUrl . $productThr->getImage() ?>" alt="">
+	            </div>
+	            <div class="title2"><?php echo $productThr->getName() ?></div>
+	            <div class="description2"><?php echo $productThr->getMetaDescription() ?></div>
+	            <div class="discountprice2"><?php echo $priceHelper->currency($productThr->getSpecialPrice(), true, false) ?></div>
+	            <div class="originprice2"><?php echo $priceHelper->currency($productThr->getPrice(), true, false) ?></div>
+	            <div class="discountoff">
+	                <img src="https://keysworlds.com/media/wysiwyg/sale/45off.png" alt=""></div>
+	            <a href="<?php echo $productThr->getProductUrl() ?>" target="_blank" rel="noopener">
+	                <button>BUY NOW</button></a>
+	        </div>
+        </div>
+        
+
+        <div class="title3">
+            <img src="https://keysworlds.com/media/wysiwyg/sale/title2.png" alt="">
+        </div>
+
+        <div class="product-list-box">
+        <?php foreach($_productList as $item): ?>
+        	<div class="list">
+	            <div class="product">
+	                <div class="cover">
+	                    <img src="<?php echo $imageBaseUrl . $item->getImage() ?>" alt="">
+	                </div>
+	                <div class="title"><?php echo $item->getName() ?></div>
+	                <div class="discountprice"><?php echo $priceHelper->currency($item->getSpecialPrice(), true, false) ?></div>
+	                <div class="originprice"><?php echo $priceHelper->currency($item->getPrice(), true, false) ?></div>
+	                <a href="<?php echo $item->getProductUrl() ?>" target="_blank" rel="noopener">
+	                    <button>BUY NOW</button></a>
+	            </div>
+	        </div>
+    	<?php endforeach; ?>
+        <div class="cl">&nbsp;</div></div>
+        </div>
+</div>
+
+<style type="text/css">
+	#maincontent{
+		max-width: none;
+		padding-left: 0px;
+		padding-right: 0px;
+		padding-top: 0px;
+	}
+	.top-next-box, .product-list-box{
+		max-width: 1200px;
+		margin: auto;
+	}
+</style>
